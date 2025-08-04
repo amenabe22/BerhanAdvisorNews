@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berhan News Feed</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .filters {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: #4CAF50;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .news-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .news-card:hover .card-image img {
+            transform: scale(1.05);
+        }
+
+        .image-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: white;
+            font-size: 48px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .category-badge {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .language-badge {
+            background: #f3e5f5;
+            color: #7b1fa2;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            color: #333;
+        }
+
+        .card-excerpt {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .meta-left {
+            display: flex;
+            gap: 15px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .channel-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .channel-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .channel-name {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: white;
+            font-size: 18px;
+        }
+
+        .error {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: #d32f2f;
+            margin: 20px 0;
+        }
+
+        .refresh-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .moderation-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .moderation-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .accept-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .accept-btn:hover {
+            background: #45a049;
+        }
+
+        .reject-btn {
+            background: #f44336;
+            color: white;
+        }
+
+        .reject-btn:hover {
+            background: #d32f2f;
+        }
+
+        .moderation-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: white;
+            z-index: 10;
+        }
+
+        .status-accepted {
+            background: #4CAF50;
+        }
+
+        .status-rejected {
+            background: #f44336;
+        }
+
+        .status-pending {
+            background: #ff9800;
+        }
+
+        .card-image {
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .stats {
+                justify-content: center;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-newspaper"></i>
+                Berhan News Feed
+            </div>
+            <div class="stats">
+                <div class="stat-item">
+                    <i class="fas fa-broadcast-tower"></i>
+                    <span id="total-channels">-</span> Channels
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-newspaper"></i>
+                    <span id="total-posts">-</span> Posts
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-clock"></i>
+                    <span id="last-update">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="filters">
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterPosts('all')">All Posts</button>
+                <button class="filter-btn" onclick="filterPosts('approved')">Not Rejected</button>
+                <button class="filter-btn" onclick="filterPosts('tech_startup')">Tech & Startup</button>
+                <button class="filter-btn" onclick="filterPosts('news')">News</button>
+                <button class="filter-btn" onclick="filterPosts('general')">General</button>
+                <button class="refresh-btn" onclick="loadNews()">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh
+                </button>
+            </div>
+        </div>
+
+        <div id="news-container">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                Loading news...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let allPosts = [];
+        let approvedPosts = [];
+        let currentFilter = 'all';
+
+        async function loadNews() {
+            const container = document.getElementById('news-container');
+            container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading news...</div>';
+
+            try {
+                // Load all posts
+                const postsResponse = await fetch(`${API_BASE}/api/v1/posts?size=50`);
+                const postsData = await postsResponse.json();
+                allPosts = postsData.items || [];
+
+                // Load approved posts (not rejected)
+                const approvedResponse = await fetch(`${API_BASE}/api/v1/posts/approved?size=50`);
+                const approvedData = await approvedResponse.json();
+                approvedPosts = approvedData.items || [];
+
+                // Load statistics
+                const statsResponse = await fetch(`${API_BASE}/api/v1/statistics`);
+                const statsData = await statsResponse.json();
+
+                // Update stats
+                document.getElementById('total-channels').textContent = statsData.total_channels || 0;
+                document.getElementById('total-posts').textContent = statsData.total_posts || 0;
+                document.getElementById('last-update').textContent = 'Just now';
+
+                // Display posts based on current filter
+                if (currentFilter === 'approved') {
+                    displayPosts(approvedPosts);
+                } else {
+                    displayPosts(allPosts);
+                }
+
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error Loading News</h3>
+                        <p>${error.message}</p>
+                        <p>Make sure the API is running on localhost:8000</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayPosts(posts) {
+            const container = document.getElementById('news-container');
+            
+            if (posts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-newspaper"></i>
+                        <h3>No posts found</h3>
+                        <p>Try refreshing or check your filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const postsHTML = posts.map(post => createPostCard(post)).join('');
+            container.innerHTML = `<div class="news-grid">${postsHTML}</div>`;
+        }
+
+        function getPostTitle(post) {
+            // If title exists and is not "Untitled", use it
+            if (post.title && post.title.trim() !== 'Untitled' && post.title.trim() !== '') {
+                return post.title;
+            }
+            
+            // Otherwise, use a short excerpt from content
+            const content = post.content || post.excerpt || '';
+            if (content) {
+                // Strip HTML tags for title
+                const plainText = content.replace(/<[^>]*>/g, '').trim();
+                const shortExcerpt = plainText.substring(0, 60);
+                return shortExcerpt.length < plainText.length ? shortExcerpt + '...' : shortExcerpt;
+            }
+            
+            // Fallback
+            return 'No title available';
+        }
+
+        function createPostCard(post) {
+            const imageUrl = post.gcs_image_url || post.image_url;
+            const imageHTML = imageUrl 
+                ? `<img src="${imageUrl}" alt="${post.title}" onerror="this.parentElement.innerHTML='<div class=\\'image-placeholder\\'><i class=\\'fas fa-newspaper\\'></i></div>'">`
+                : '<div class="image-placeholder"><i class="fas fa-newspaper"></i></div>';
+
+            const channel = post.channel || {};
+            const publishedDate = new Date(post.published_date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+
+            // Get moderation status
+            const moderationStatus = post.moderation_status || 'pending';
+            const statusText = moderationStatus === 'ready' ? 'accepted' : 
+                              moderationStatus === 'wrong' ? 'rejected' : 'pending';
+            const statusClass = `status-${statusText}`;
+            const statusDisplay = statusText.toUpperCase();
+
+            return `
+                <div class="news-card" onclick="openPost('${post.id}')">
+                    <div class="card-image">
+                        <div class="moderation-status ${statusClass}">${statusDisplay}</div>
+                        ${imageHTML}
+                    </div>
+                    <div class="card-content">
+                        <div class="channel-info">
+                            <div class="channel-avatar">
+                                ${channel.name ? channel.name.charAt(0).toUpperCase() : 'N'}
+                            </div>
+                            <div class="channel-name">${channel.name || 'Unknown Channel'}</div>
+                        </div>
+                        
+                        <div class="card-header">
+                            <span class="category-badge">${post.category || 'General'}</span>
+                            <span class="language-badge">${post.language || 'EN'}</span>
+                        </div>
+                        
+                        <h3 class="card-title">${getPostTitle(post)}</h3>
+                        
+                        <div class="card-excerpt">${post.excerpt || post.content?.substring(0, 150) || 'No content available'}...</div>
+                        
+                        <div class="card-meta">
+                            <div class="meta-left">
+                                <div class="meta-item">
+                                    <i class="fas fa-calendar"></i>
+                                    ${publishedDate}
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-eye"></i>
+                                    ${post.views || 0}
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-share"></i>
+                                    ${post.forwards || 0}
+                                </div>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="moderation-buttons">
+                            <button class="moderation-btn accept-btn" onclick="moderatePost('${post.id}', 'accepted', event)">
+                                <i class="fas fa-check"></i> Accept
+                            </button>
+                            <button class="moderation-btn reject-btn" onclick="moderatePost('${post.id}', 'rejected', event)">
+                                <i class="fas fa-times"></i> Reject
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function filterPosts(category) {
+            currentFilter = category;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Filter posts
+            let filteredPosts;
+            if (category === 'all') {
+                filteredPosts = allPosts;
+            } else if (category === 'approved') {
+                filteredPosts = approvedPosts;
+            } else {
+                filteredPosts = allPosts.filter(post => post.category === category);
+            }
+
+            displayPosts(filteredPosts);
+        }
+
+        function openPost(postId) {
+            // You can implement a modal or redirect to a detailed view
+            alert(`Opening post ${postId}. This could open a modal or redirect to a detailed view.`);
+        }
+
+        async function moderatePost(postId, status, event) {
+            // Prevent the card click event from firing
+            event.stopPropagation();
+            
+            // Simple confirmation
+            const action = status === 'accepted' ? 'accept' : 'reject';
+            if (confirm(`Are you sure you want to ${action} this post?`)) {
+                try {
+                    // Make API call to update moderation status
+                    const response = await fetch(`${API_BASE}/api/v1/posts/${postId}/moderate?status=${status}&moderator=web_interface`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        console.log(`Post ${action}ed successfully!`, result);
+                        alert(`Post ${action}ed successfully!`);
+                        
+                        // Optionally reload the news to show updated status
+                        // loadNews();
+                    } else {
+                        const error = await response.json();
+                        console.error('Moderation failed:', error);
+                        alert(`Failed to ${action} post: ${error.detail || 'Unknown error'}`);
+                    }
+                } catch (error) {
+                    console.error('Error moderating post:', error);
+                    alert(`Error ${action}ing post: ${error.message}`);
+                }
+            }
+        }
+
+        // Load news on page load
+        window.onload = function() {
+            loadNews();
+        };
+
+        // Auto-refresh every 5 minutes
+        setInterval(loadNews, 5 * 60 * 1000);
+    </script>
+</body>
+</html> 
