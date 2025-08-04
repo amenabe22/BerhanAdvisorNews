@@ -4,6 +4,7 @@
 !.env.example
 
 # Credentials and secrets
+old/
 credentials/
 *.json
 *.pem
@@ -24,13 +25,27 @@ credentials/
 logs/
 *.log
 
-# Images
+# Media files
 images/
 *.jpg
 *.jpeg
 *.png
 *.gif
 *.webp
+*.bmp
+*.tiff
+*.svg
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.wmv
+*.flv
+*.webm
+*.mp3
+*.wav
+*.aac
+*.ogg
 
 # Python
 __pycache__/
