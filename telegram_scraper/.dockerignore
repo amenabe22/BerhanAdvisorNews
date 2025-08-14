@@ -25,15 +25,20 @@ coverage.xml
 .hypothesis
 
 # Virtual environments
-venv/
+.env
+.venv
 env/
+venv/
 ENV/
+env.bak/
+venv.bak/
 
-# IDE
+# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
 # OS
 .DS_Store
@@ -44,29 +49,21 @@ ENV/
 ehthumbs.db
 Thumbs.db
 
-# Docker
-Dockerfile
-.dockerignore
-
-# Documentation
-README.md
-*.md
-
-# Logs
-logs/
-*.log
-
-# Database
+# Project specific
 *.db
 *.sqlite
-
-# Telegram session files
-*.session
-
-# Environment files
-.env
-.env.*
-
-# Temporary files
-tmp/
-temp/ 
+*.sqlite3
+telegram_news.db
+news.db
+telegram_scraper_session.session
+logs/
+images/
+data/
+old/
+tests/
+*.html
+*.md
+DOCKER_README.md
+SETUP_GUIDE.md
+GCS_FIX.md
+API_DOCUMENTATION.md 

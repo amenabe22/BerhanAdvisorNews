@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:15
+    image: postgres:15-alpine
     container_name: telegram-scraper-postgres
     environment:
       - POSTGRES_DB=telegram_news
@@ -25,44 +25,20 @@ services:
     ports:
       - "8003:8000"
     environment:
-      # Telegram API credentials
-      - TELEGRAM_API_ID=${TELEGRAM_API_ID}
-      - TELEGRAM_API_HASH=${TELEGRAM_API_HASH}
-      - TELEGRAM_PHONE=${TELEGRAM_PHONE}
-      - TELEGRAM_SESSION_NAME=${TELEGRAM_SESSION_NAME:-telegram_scraper}
-      
       # Database
-      - DATABASE_URL=${DATABASE_URL:-postgresql://telegram_user:telegram_password@postgres:5432/telegram_news}
-      
-      # GCS Configuration
-      - GCS_BUCKET_NAME=${GCS_BUCKET_NAME}
-      - GCS_CREDENTIALS_PATH=${GCS_CREDENTIALS_PATH}
+      - DATABASE_URL=postgresql://telegram_user:telegram_password@postgres:5432/telegram_news
       
       # API Configuration
       - API_HOST=0.0.0.0
       - API_PORT=8000
       
-      # Scraping Configuration
-      - RATE_LIMIT_DELAY=${RATE_LIMIT_DELAY:-2}
-      
-      # Storage Configuration
-      - IMAGES_DIR=./images
-      - MAX_IMAGE_SIZE=${MAX_IMAGE_SIZE:-5242880}
-      
-      # Logging Configuration
-      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      # Basic Configuration
+      - LOG_LEVEL=INFO
       
     volumes:
-      # Persist database
       - ./data:/app/data
-      # Persist logs
       - ./logs:/app/logs
-      # Persist images
       - ./images:/app/images
-      # Persist Telegram session
-      - ./telegram_session:/app/telegram_session
-      # GCS credentials
-      - ./credentials:/app/credentials:ro
       
     restart: unless-stopped
     depends_on:
@@ -77,8 +53,4 @@ services:
       start_period: 40s
 
 volumes:
-  postgres_data:
-
-networks:
-  default:
-    name: telegram-scraper-network 
+  postgres_data: 
