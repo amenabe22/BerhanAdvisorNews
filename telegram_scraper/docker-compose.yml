@@ -1,0 +1,33 @@
+services:
+
+  telegram-scraper:
+    build: .
+    container_name: telegram-scraper
+    ports:
+      - "8003:8000"
+    environment:
+      # Database - use the shared 'db' service from main docker-compose
+      - DATABASE_URL=postgresql://postgres:password@db:5432/berhan_advisor
+      
+      # API Configuration
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      
+      # Basic Configuration
+      - LOG_LEVEL=INFO
+      
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./images:/app/images
+      
+    restart: unless-stopped
+    depends_on:
+      - db
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

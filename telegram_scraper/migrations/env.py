@@ -31,7 +31,13 @@ target_metadata = Base.metadata
 
 def get_url():
     """Get database URL from environment or config"""
-    return os.getenv('DATABASE_URL', Config.DATABASE_URL)
+    # Priority: environment variable first, then config file
+    env_url = os.getenv('DATABASE_URL')
+    if env_url:
+        return env_url
+    
+    # Fallback to config file
+    return config.get_main_option("sqlalchemy.url")
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
