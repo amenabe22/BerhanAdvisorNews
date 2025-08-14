@@ -1,6 +1,24 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:15
+    container_name: telegram-scraper-postgres
+    environment:
+      - POSTGRES_DB=telegram_news
+      - POSTGRES_USER=telegram_user
+      - POSTGRES_PASSWORD=telegram_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U telegram_user -d telegram_news"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   telegram-scraper:
     build: .
     container_name: telegram-scraper
@@ -14,7 +32,7 @@ services:
       - TELEGRAM_SESSION_NAME=${TELEGRAM_SESSION_NAME:-telegram_scraper}
       
       # Database
-      - DATABASE_URL=${DATABASE_URL:-sqlite:///./telegram_news.db}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://telegram_user:telegram_password@postgres:5432/telegram_news}
       
       # GCS Configuration
       - GCS_BUCKET_NAME=${GCS_BUCKET_NAME}
@@ -47,6 +65,9 @@ services:
       - ./credentials:/app/credentials:ro
       
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
     
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
@@ -54,6 +75,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+
+volumes:
+  postgres_data:
 
 networks:
   default:

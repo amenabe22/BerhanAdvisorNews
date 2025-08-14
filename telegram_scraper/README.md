@@ -85,6 +85,12 @@ python main.py init
 python main.py scrape
 ```
 
+### Generate Top 10 News from All Channels
+
+```bash
+python3 main.py scrape --posts 10
+```
+
 ### Scrape Specific Channels
 
 ```bash

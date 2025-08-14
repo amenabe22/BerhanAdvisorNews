@@ -18,7 +18,7 @@ class TelegramChannel:
 
 class Config:
     # Database
-    DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./telegram_news.db")
+    DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:password@db:5432/berhan_advisor")
     
     # Telegram API credentials
     TELEGRAM_API_ID = os.getenv("TELEGRAM_API_ID")

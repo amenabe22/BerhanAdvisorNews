@@ -1,0 +1,144 @@
+# News Sources Configuration
+# This file contains all news sources with their specific scraping settings
+
+sources:
+  - name: "Addis Fortune"
+    url: "https://addisfortune.news/"
+    category: "business"
+    language: "en"
+    is_active: true
+    selectors:
+      article_container: "article, .post, .news-item, .story"
+      title: "h1, h2, h3, .title, .headline"
+      content: ".content, .post-content, .article-content, .story-content"
+      image: ".featured-image img, .article-image img, .post-image img, img[src*='.jpg']:not([src*='ad']):not([src*='banner']):not([src*='logo'])"
+      link: "a[href*='/']"
+      date: "time, .date, .published, .timestamp"
+    ai_prompts:
+      title_extraction: "Extract the main news headline from this HTML content. Return only the headline, no explanations."
+      content_extraction: "Extract the main news article content from this HTML. Focus on the actual news story, not navigation or ads."
+      date_extraction: "Extract the publication date from this content. Return only the date in YYYY-MM-DD format."
+    validation:
+      min_title_length: 10
+      min_content_length: 200
+      exclude_patterns:
+        - "subscribe"
+        - "login"
+        - "newsletter"
+        - "advertisement"
+        - "sponsored"
+
+  - name: "Fana Broadcasting Corporate"
+    url: "https://www.fanamc.com/english/news/"
+    category: "general"
+    language: "en"
+    is_active: true
+    selectors:
+      article_container: "article, .post, .news-item, .story"
+      title: "h1, h2, h3, .title, .headline"
+      content: ".content, .post-content, .article-content, .story-content"
+      image: "img.b-loaded:not([src*='ad']):not([src*='banner']):not([src*='logo']), .featured-image img, .article-image img"
+      link: "a[href*='/']"
+      date: "time, .date, .published, .timestamp"
+    ai_prompts:
+      title_extraction: "Extract the main news headline from this HTML content. Return only the headline, no explanations."
+      content_extraction: "Extract the main news article content from this HTML. Focus on the actual news story, not navigation or ads."
+      date_extraction: "Extract the publication date from this content. Return only the date in YYYY-MM-DD format."
+    validation:
+      min_title_length: 10
+      min_content_length: 200
+      exclude_patterns:
+        - "subscribe"
+        - "login"
+        - "newsletter"
+        - "advertisement"
+        - "sponsored"
+
+  - name: "Shega"
+    url: "https://shega.co/"
+    category: "technology"
+    language: "en"
+    is_active: true
+    selectors:
+      article_container: "article, .post, .news-item, .story"
+      title: "h1, h2, h3, .title, .headline"
+      content: ".content, .post-content, .article-content, .story-content"
+      image: "img[src*='.jpg']:not([src*='ad']):not([src*='banner']):not([src*='logo']), .featured-image img, .article-image img"
+      link: "a[href*='/']"
+      date: "time, .date, .published, .timestamp"
+    ai_prompts:
+      title_extraction: "Extract the main news headline from this HTML content. Return only the headline, no explanations."
+      content_extraction: "Extract the main news article content from this HTML. Focus on the actual news story, not navigation or ads."
+      date_extraction: "Extract the publication date from this content. Return only the date in YYYY-MM-DD format."
+    validation:
+      min_title_length: 10
+      min_content_length: 200
+      exclude_patterns:
+        - "subscribe"
+        - "login"
+        - "newsletter"
+        - "advertisement"
+        - "sponsored"
+
+# Global settings
+settings:
+  max_articles_per_source: 10
+  request_timeout: 30
+  user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+  retry_attempts: 3
+  delay_between_requests: 2
+  
+# AI Configuration
+ai_settings:
+  model: "gpt-3.5-turbo-0125"
+  max_tokens: 1000
+  temperature: 0.1
+  
+# Validation rules
+validation_rules:
+  title_blacklist:
+    - "sorry"
+    - "i can't"
+    - "cannot"
+    - "unable"
+    - "apologies"
+    - "i cannot provide"
+    - "missing from html"
+    - "title:"
+    - "shega weekly"
+    - "newsletter"
+    - "subscribe"
+    - "login"
+    - "twitter"
+    - "x.com"
+  
+  url_blacklist:
+    - "x.com"
+    - "twitter.com"
+    - "newsletter"
+    - "login"
+    - "subscribe"
+    - "facebook.com"
+    - "linkedin.com"
+  
+  # Image filtering rules
+  image_blacklist:
+    - "ad"
+    - "advertisement"
+    - "banner"
+    - "sponsor"
+    - "promo"
+    - "logo"
+    - "icon"
+    - "button"
+    - "badge"
+    - "stamp"
+    - "social"
+    - "share"
+    - "facebook"
+    - "twitter"
+    - "linkedin"
+    - "giphy"
+    - "gif"
+    - "header"
+    - "footer" 
