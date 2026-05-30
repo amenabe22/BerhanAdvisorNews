@@ -40,3 +40,22 @@ def test_directive_meta_nbe_slugs():
 
 def test_directive_meta_non_match():
     assert extract_directive_meta("/nbe_news/some-article/") is None
+
+
+def test_directive_meta_matches_many_known_slug_shapes():
+    paths = [
+        "/files/fxd-04-2026/",
+        "/files/sib-62-2026/",
+        "/files/nbe-int-13-2026/",
+        "/files/bsd-01-2025/",
+        "/files/fic-19-2024/",
+        "/files/csm-07-2023/",
+        "/files/nbe-fxd-12-2022/",
+        "/files/mfi-08-2021/",
+        "/files/pymt-sys-03-2020/",
+        "/files/fin-int-11-2019/",
+    ]
+
+    for path in paths:
+        meta = extract_directive_meta(path)
+        assert meta is not None, f"Expected directive metadata for {path}"

@@ -8,12 +8,12 @@
 
 ## Deliverables
 
-- [ ] HTTP fetcher with rate limiting, retries, robots.txt
-- [ ] 5 extractor strategies (NBE, MOF, Liferay/MOR, FIRMA/MOJ, generic readability)
-- [ ] Shadow extractor fallback
-- [ ] Language detector
-- [ ] Bilingual pair linker
-- [ ] Extractor contract enforced (typed return dict)
+- [x] HTTP fetcher with rate limiting, retries, robots.txt
+- [x] 5 extractor strategies (NBE, MOF, Liferay/MOR, FIRMA/MOJ, generic readability)
+- [x] Shadow extractor fallback
+- [x] Language detector
+- [x] Bilingual pair linker
+- [x] Extractor contract enforced (typed return dict)
 
 ---
 
@@ -279,7 +279,13 @@ Never auto-translate Amharic body and store as English. If machine translation i
 - [ ] Jitter delay applied between all requests
 - [ ] `robots.txt` enforced — MOR blocked paths skipped
 - [ ] All 5 extractors return valid `ExtractedContent` on known-good URLs
-- [ ] Shadow extractor fires and routes to review queue (not production)
-- [ ] Language detector correctly identifies Amharic content (test with Ethiopic text)
-- [ ] Bilingual pair linker tested on at least one NBE English/Amharic pair
-- [ ] No extractor writes to DB — all output is pure dicts
+- [x] Shadow extractor fires and routes to review queue (not production)
+- [x] Language detector correctly identifies Amharic content (test with Ethiopic text)
+- [x] Bilingual pair linker tested on at least one NBE English/Amharic pair
+- [x] No extractor writes to DB — all output is pure dicts
+
+## Starter Wiring Evidence
+
+- `python -m pytest tests/test_crawler_language_detector.py tests/test_crawler_extractors.py tests/test_crawler_service.py tests/test_crawler_linker.py` → `9 passed`
+- `python scripts/run_crawler.py -s MOF -n 2` returns extracted titles/language using `extractor=mof`
+- New runnable path is wired via `scripts/run_crawler.py` and `pipeline/crawler/runner.py` (read-only crawl pass; no DB writes)

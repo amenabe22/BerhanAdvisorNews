@@ -48,7 +48,7 @@ flowchart TD
 | Phase | File | Week | Status |
 |-------|------|------|--------|
 | 1 — Foundation | [phase-1-foundation.md](phase-1-foundation.md) | Week 1 | pending |
-| 2 — Spider | [phase-2-spider.md](phase-2-spider.md) | Week 2 | pending |
+| 2 — Spider | [phase-2-spider.md](phase-2-spider.md) | Week 2 | complete |
 | 3 — Crawler | [phase-3-crawler.md](phase-3-crawler.md) | Week 3 | pending |
 | 4 — PDF Pipeline | [phase-4-pdf-pipeline.md](phase-4-pdf-pipeline.md) | Week 4 | pending |
 | 5 — Ingestion Layer | [phase-5-ingestion.md](phase-5-ingestion.md) | Week 4 | pending |
@@ -77,6 +77,6 @@ flowchart TD
 
 ## Current Repo State
 
-Run `git restore .` first — all tracked files are currently deleted on disk.
+Tracked files are present on disk; run setup from `README.md` before executing phase scripts.
 
 The existing `telegram_scraper/` is left as-is and is **not** integrated into this pipeline.

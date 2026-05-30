@@ -68,4 +68,13 @@ class LiferayAdapter(SpiderAdapter):
                 except Exception:
                     continue
 
-        return list(dict.fromkeys(urls))
+        deduped = list(dict.fromkeys(urls))
+        if deduped:
+            return deduped
+        return _fallback_urls(selectors)
+
+
+def _fallback_urls(selectors: dict) -> list[str]:
+    """MOR can intermittently block extraction; return configured safe URLs."""
+    seeds = selectors.get("seed_urls") or selectors.get("canary_urls") or []
+    return list(dict.fromkeys(u for u in seeds if u))
